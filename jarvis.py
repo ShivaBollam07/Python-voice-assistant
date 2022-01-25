@@ -26,27 +26,23 @@ def speak(audio):
     engine.runAndWait()
 
 
-def alarm(text):
-    dTimeA = datefinder.find_dates(text)
+def alarm(Timing):
+    altime = str(datetime.datetime.now().strptime(Timing,"%I:%M %P"))
+    altime = altime[11:-3]
 
-    for mat in dTimeA:
-        print(mat)
-        stringA = str(mat)
-        timeA = stringA[11:]
-        hourA = timeA[:-6]
-        hourA = int(hourA)
-        minA = timeA[3:-3]
-        minA = int(minA)
+    Horeal = altime[:2]
+    Horeal = int(Horeal)
+    Mireal = altime[3:5]
+    Mireal = int(Mireal)
+    print(f"Done,alarm is set for (Timing)")
 
-        speak("alarm set")
-
-        while True:
-            if hourA == datetime.datetime.now().hour:
-                if minA == datetime.datetime.now().minute:
-                    speak("Sir, its time to wake up")
-                    os.startfile("song.mp3")
-                elif minA < datetime.datetime.now().minute:
-                    break
+    while True:
+        if Horeal == datetime.datetime.now().hour:
+            if Mireal == datetime.datetime.now().minute:
+                print("alarm is running")
+                winsound.PlaySound('abc',winsound.SND_LOOP)
+            elif Mireal<datetime.datetime.now().minute:
+                break
 
 
 def wishMe():
@@ -158,8 +154,13 @@ if __name__ == '__main__':
                 print(e)
                 speak("I am not able to send this email")
 
-        elif 'alarm' in query:
-            alarm()
+         elif 'alarm' in query:
+            speak("please tell me the time to set alarm,For example say set alarm to 5:30 am")
+            tt = takeCommand()    #set alarm at 5:30 a.m.
+            tt = tt.replace("set alarm to ","")
+            tt = tt.upper()
+            import MyAlarm
+            MyAlarm.alarm(tt)
 
 
         elif 'send a mail' in query:
